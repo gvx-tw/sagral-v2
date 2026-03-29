@@ -12,7 +12,7 @@ export function Footer({ config }: FooterProps) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {/* Logo y descripción */}
           <div>
-            <h3 className="text-white text-lg font-bold mb-2">Sagral Automotores</h3>
+            <h3 className="text-[#DDB43C] text-lg font-bold mb-2">Sagral Automotores</h3>
             <p className="text-sm">
               Concesionaria de autos nuevos y usados en Chaco, Argentina.
             </p>
@@ -35,9 +35,9 @@ export function Footer({ config }: FooterProps) {
           <div>
             <h4 className="text-white font-semibold mb-3">Navegación</h4>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/" className="hover:text-white transition-colors">Inicio</Link></li>
-              <li><Link href="/catalogo" className="hover:text-white transition-colors">Catálogo</Link></li>
-              <li><Link href="/#contacto" className="hover:text-white transition-colors">Contacto</Link></li>
+              <li><Link href="/" className="hover:text-[#DDB43C] transition-colors">Inicio</Link></li>
+              <li><Link href="/catalogo" className="hover:text-[#DDB43C] transition-colors">Catálogo</Link></li>
+              <li><Link href="/#contacto" className="hover:text-[#DDB43C] transition-colors">Contacto</Link></li>
             </ul>
           </div>
 
@@ -68,7 +68,7 @@ function SocialLink({ href, label, children }: { href: string; label: string; ch
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="w-9 h-9 rounded-lg bg-gray-800 hover:bg-gray-700 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+      className="w-9 h-9 rounded-lg bg-gray-800 hover:bg-gray-700 flex items-center justify-center text-gray-400 hover:text-[#DDB43C] transition-colors"
     >
       {children}
     </a>

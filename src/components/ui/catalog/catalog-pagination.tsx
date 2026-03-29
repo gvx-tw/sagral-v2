@@ -56,7 +56,7 @@ export function CatalogPagination({ currentPage, totalPages }: Props) {
             onClick={() => goToPage(p as number)}
             className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
               p === currentPage
-                ? 'bg-blue-600 text-white'
+                ? 'bg-[#DDB43C] text-black'
                 : 'border border-gray-300 hover:bg-gray-50'
             }`}
           >

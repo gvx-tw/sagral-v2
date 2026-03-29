@@ -13,10 +13,18 @@ export function ContactSection({ config }: ContactSectionProps) {
     <section className="py-20 bg-white" id="contacto">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <p className="text-[#DDB43C] text-sm font-semibold tracking-widest uppercase mb-3">
+            Hablemos
+          </p>
+          <h2 className="text-3xl md:text-4xl font-bold text-[#111111] mb-4">
             Contacto
           </h2>
-          <p className="text-gray-600 max-w-xl mx-auto">
+          <div className="flex items-center justify-center gap-2 mb-5">
+            <div className="w-8 h-px bg-[#DDB43C]/40" />
+            <div className="w-12 h-1 bg-[#DDB43C] rounded-full" />
+            <div className="w-8 h-px bg-[#DDB43C]/40" />
+          </div>
+          <p className="text-[#666666] max-w-xl mx-auto">
             Estamos para ayudarte. Comunicáte por el medio que prefieras.
           </p>
         </div>
@@ -100,7 +108,7 @@ function ContactItem({
 }) {
   const content = (
     <div className="flex items-start gap-4">
-      <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0 text-xl">
+      <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center shrink-0 text-xl">
         {icon}
       </div>
       <div>

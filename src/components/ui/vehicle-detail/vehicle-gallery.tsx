@@ -1,9 +1,9 @@
 // src/components/vehicle-detail/vehicle-gallery.tsx
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import Image from 'next/image'
-import { ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
+import { ChevronLeft, ChevronRight, X, ZoomIn } from 'lucide-react'
 import { VehicleImage } from '@/types/vehicle-detail'
 
 interface VehicleGalleryProps {
@@ -36,6 +36,30 @@ export function VehicleGallery({ images, vehicleName }: VehicleGalleryProps) {
     const diff = touchStartX - e.changedTouches[0].clientX
     if (Math.abs(diff) > 50) diff > 0 ? next() : prev()
   }
+
+  // Keyboard navigation in lightbox
+  useEffect(() => {
+    if (!lightboxOpen) return
+
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setLightboxOpen(false)
+      if (e.key === 'ArrowLeft') prev()
+      if (e.key === 'ArrowRight') next()
+    }
+
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [lightboxOpen, prev, next])
+
+  // Lock body scroll when lightbox is open
+  useEffect(() => {
+    if (lightboxOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => { document.body.style.overflow = '' }
+  }, [lightboxOpen])
 
   if (!hasImages) {
     return (
@@ -103,9 +127,9 @@ export function VehicleGallery({ images, vehicleName }: VehicleGalleryProps) {
             <button
               key={img.id}
               onClick={() => setCurrentIndex(i)}
-              className={`relative flex-shrink-0 w-20 h-14 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+              className={`relative shrink-0 w-20 h-14 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
                 i === currentIndex
-                  ? 'border-primary shadow-md scale-105'
+                  ? 'border-[#DDB43C] shadow-md scale-105'
                   : 'border-transparent opacity-60 hover:opacity-100'
               }`}
             >
@@ -124,36 +148,44 @@ export function VehicleGallery({ images, vehicleName }: VehicleGalleryProps) {
       {/* Lightbox */}
       {lightboxOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4 animate-in fade-in duration-200"
           onClick={() => setLightboxOpen(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Galería de ${vehicleName}`}
         >
+          {/* Botón cerrar */}
           <button
-            className="absolute top-4 right-4 text-white text-3xl leading-none hover:text-gray-300"
+            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
             onClick={() => setLightboxOpen(false)}
-            aria-label="Cerrar"
+            aria-label="Cerrar galería"
           >
-            ✕
+            <X className="w-5 h-5" />
           </button>
 
+          {/* Flechas */}
           {sorted.length > 1 && (
             <>
               <button
                 onClick={(e) => { e.stopPropagation(); prev() }}
-                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white rounded-full p-3 transition-colors"
+                className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/10 hover:bg-[#DDB43C]/80 text-white hover:text-black rounded-full flex items-center justify-center transition-all duration-200"
+                aria-label="Imagen anterior"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
               <button
                 onClick={(e) => { e.stopPropagation(); next() }}
-                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white rounded-full p-3 transition-colors"
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/10 hover:bg-[#DDB43C]/80 text-white hover:text-black rounded-full flex items-center justify-center transition-all duration-200"
+                aria-label="Imagen siguiente"
               >
                 <ChevronRight className="w-6 h-6" />
               </button>
             </>
           )}
 
+          {/* Imagen grande */}
           <div
-            className="relative max-w-5xl w-full aspect-video"
+            className="relative w-full max-w-5xl max-h-[80vh] aspect-video"
             onClick={(e) => e.stopPropagation()}
           >
             <Image
@@ -162,11 +194,18 @@ export function VehicleGallery({ images, vehicleName }: VehicleGalleryProps) {
               fill
               className="object-contain"
               sizes="100vw"
+              priority
             />
           </div>
 
-          <div className="absolute bottom-4 text-white/60 text-sm">
-            {currentIndex + 1} / {sorted.length}
+          {/* Contador + hint teclado */}
+          <div className="absolute bottom-4 flex flex-col items-center gap-1">
+            <span className="text-white/80 text-sm font-medium">
+              {currentIndex + 1} / {sorted.length}
+            </span>
+            <span className="text-white/30 text-xs hidden md:block">
+              ← → para navegar · ESC para cerrar
+            </span>
           </div>
         </div>
       )}

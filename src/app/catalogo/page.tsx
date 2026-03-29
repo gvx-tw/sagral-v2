@@ -3,6 +3,7 @@ import { CatalogFilters } from '@/components/ui/catalog/catalog-filters'
 import { CatalogSearch } from '@/components/ui/catalog/catalog-search'
 import { VehicleCard } from '@/components/ui/catalog/vehicle-card'
 import { CatalogPagination } from '@/components/ui/catalog/catalog-pagination'
+import { ActiveFilters } from '@/components/ui/catalog/active-filters'
 import { CatalogData, CatalogFilters as FilterType } from '@/types/catalog'
 
 interface PageProps {
@@ -29,7 +30,7 @@ export default async function CatalogoPage({ searchParams }: PageProps) {
   const data = await getCatalogData(filters)
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-[#efefef]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, #d4d4d4 1px, transparent 0)', backgroundSize: '24px 24px' }}>
       <div className="max-w-7xl mx-auto px-4 py-8">
 
         {/* Header */}
@@ -42,12 +43,15 @@ export default async function CatalogoPage({ searchParams }: PageProps) {
           </p>
         </div>
 
-        {/* Buscador — Suspense necesario porque useSearchParams es async */}
-        <div className="mb-6">
+        {/* Buscador */}
+        <div className="mb-4">
           <Suspense fallback={<div className="h-12 bg-gray-200 rounded-xl animate-pulse" />}>
             <CatalogSearch />
           </Suspense>
         </div>
+
+        {/* Chips de filtros activos */}
+        <ActiveFilters filters={filters} />
 
         {/* Layout: filtros sidebar + grilla */}
         <div className="flex flex-col lg:flex-row gap-6">

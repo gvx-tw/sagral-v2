@@ -2,6 +2,9 @@
 
 import { useAnalytics } from '@/hooks/use-analytics'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import { ChevronDown } from 'lucide-react'
+import { AnimatedCounter } from '@/components/ui/animated-counter'
 
 interface HeroSectionProps {
   whatsapp?: string
@@ -9,53 +12,175 @@ interface HeroSectionProps {
 
 export function HeroSection({ whatsapp }: HeroSectionProps) {
   const { track } = useAnalytics()
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   const waLink = whatsapp
     ? `https://wa.me/${whatsapp.replace(/\D/g, '')}?text=Hola%2C%20me%20interesa%20un%20veh%C3%ADculo`
     : '#'
 
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center bg-linear-to-br from-gray-950 via-gray-900 to-gray-800 overflow-hidden">
-      {/* Fondo decorativo */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent" />
+    <>
+      {/* ── Navbar ─────────────────────────────────────────── */}
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          scrolled
+            ? 'bg-black/95 backdrop-blur-lg border-b border-white/10 shadow-2xl shadow-black/40'
+            : 'bg-black/80 backdrop-blur-md border-b border-white/5'
+        }`}
+      >
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2 group">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/icons/icon-512.png"
+              alt="Sagral Automotores"
+              className="h-9 w-9 transition-transform duration-200 group-hover:scale-105"
+            />
+            <div className="hidden sm:flex flex-col leading-tight ml-1">
+              <span className="text-[#DDB43C] font-bold text-sm tracking-widest">SAGRAL</span>
+              <span className="text-white/60 text-[10px] tracking-widest">AUTOMOTORES</span>
+            </div>
+          </Link>
 
-      <div className="relative z-10 container mx-auto px-4 text-center">
-        <span className="inline-block mb-4 px-4 py-1 rounded-full bg-blue-600/20 text-blue-400 text-sm font-medium border border-blue-600/30">
-          Concesionaria oficial en Bahía Blanca
-        </span>
 
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-          Tu próximo auto,{' '}
-          <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-cyan-400">
-            a un paso
-          </span>
-        </h1>
+          {/* Desktop nav */}
+          <nav className="hidden md:flex items-center gap-7 text-sm font-medium">
+            <Link href="/"          className="text-white/70 hover:text-[#DDB43C] transition-colors duration-200">Inicio</Link>
+            <Link href="/catalogo"  className="text-white/70 hover:text-[#DDB43C] transition-colors duration-200">Catálogo</Link>
+            <Link href="/#contacto" className="text-white/70 hover:text-[#DDB43C] transition-colors duration-200">Contacto</Link>
+            <Link
+              href="/catalogo"
+              className="px-5 py-2 bg-[#DDB43C] hover:bg-[#B8941F] text-black font-bold rounded-lg transition-all duration-200 shadow-lg shadow-[#DDB43C]/20 hover:shadow-[#DDB43C]/40 hover:scale-105"
+            >
+              Ver autos
+            </Link>
+          </nav>
 
-        <p className="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
-          Venta de autos nuevos y usados, financiación y gestión de documentación.
-          Más de 10 años en el mercado automotor del norte argentino.
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          {/* Mobile CTA */}
           <Link
             href="/catalogo"
-            className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-200 hover:scale-105 shadow-lg shadow-blue-600/25"
+            className="md:hidden px-4 py-2 bg-[#DDB43C] hover:bg-[#B8941F] text-black font-bold rounded-lg text-sm transition-all duration-200 shadow-lg shadow-[#DDB43C]/20"
           >
-            Ver Catálogo
+            Ver autos
           </Link>
-          <a
-            href={waLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => track('whatsapp_click', { metadata: { source: 'hero' } })}
-            className="px-8 py-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition-all duration-200 hover:scale-105 shadow-lg shadow-green-600/25 flex items-center justify-center gap-2"
-          >
-            <WhatsAppIcon />
-            Consultar por WhatsApp
-          </a>
         </div>
-      </div>
-    </section>
+      </header>
+
+      {/* ── Hero ───────────────────────────────────────────── */}
+      <section className="relative min-h-screen flex items-center justify-center bg-black overflow-hidden">
+
+        {/* Background layers */}
+        <div className="absolute inset-0 pointer-events-none">
+          {/* Radial gold glow — dramatic */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_55%,rgba(221,180,60,0.13)_0%,transparent_70%)]" />
+          {/* Wide bottom glow */}
+          <div className="absolute bottom-0 left-0 right-0 h-64 bg-linear-to-t from-[#DDB43C]/5 to-transparent" />
+          {/* Subtle grid */}
+          <div
+            className="absolute inset-0 opacity-[0.035]"
+            style={{
+              backgroundImage:
+                'linear-gradient(#DDB43C 1px, transparent 1px), linear-gradient(90deg, #DDB43C 1px, transparent 1px)',
+              backgroundSize: '72px 72px',
+            }}
+          />
+          {/* Fade out bottom */}
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-black to-transparent" />
+        </div>
+
+        {/* Glowing orb behind title */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-[#DDB43C]/6 rounded-full blur-[120px] pointer-events-none" />
+
+        {/* Content */}
+        <div className="relative z-10 container mx-auto px-4 text-center pt-16">
+
+          {/* Badge */}
+          <div className="animate-fade-in-up" style={{ animationDelay: '80ms' }}>
+            <span className="inline-flex items-center gap-2 mb-7 px-5 py-2 rounded-full border border-[#DDB43C]/40 text-[#DDB43C] text-sm font-medium bg-[#DDB43C]/5 tracking-wide">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#DDB43C] animate-pulse" />
+              Concesionaria oficial en Bahía Blanca
+            </span>
+          </div>
+
+          {/* Headline */}
+          <div className="animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+            <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] font-bold text-white mb-6 leading-[1.05] tracking-tight font-(family-name:--font-display)">
+              Tu próximo auto,
+              <br />
+              <span className="text-[#DDB43C]">a un paso</span>
+            </h1>
+          </div>
+
+          {/* Subtext */}
+          <div className="animate-fade-in-up" style={{ animationDelay: '320ms' }}>
+            <p className="text-base md:text-lg text-white/55 mb-10 max-w-lg mx-auto leading-relaxed">
+              Venta de autos nuevos y usados, financiación y gestión documental.
+              Más de 10 años en el mercado automotor.
+            </p>
+          </div>
+
+          {/* CTAs */}
+          <div
+            className="animate-fade-in-up flex flex-col sm:flex-row gap-4 justify-center"
+            style={{ animationDelay: '440ms' }}
+          >
+            <Link
+              href="/catalogo"
+              className="px-9 py-4 bg-[#DDB43C] hover:bg-[#B8941F] text-black font-bold rounded-xl transition-all duration-200 hover:scale-105 shadow-xl shadow-[#DDB43C]/30 hover:shadow-[#DDB43C]/50 text-base"
+            >
+              Ver Catálogo
+            </Link>
+            <a
+              href={waLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => track('whatsapp_click', { metadata: { source: 'hero' } })}
+              className="px-9 py-4 border border-white/20 hover:border-white/40 hover:bg-white/5 text-white font-semibold rounded-xl transition-all duration-200 hover:scale-105 flex items-center justify-center gap-2.5 text-base backdrop-blur-sm"
+            >
+              <WhatsAppIcon />
+              Consultar por WhatsApp
+            </a>
+          </div>
+
+          {/* Stats strip */}
+          <div
+            className="animate-fade-in-up mt-16 pt-8 border-t border-white/8"
+            style={{ animationDelay: '600ms' }}
+          >
+            <div className="flex justify-center items-center gap-6 md:gap-12 flex-wrap">
+              <StatItem prefix="+" end={10} label="Años de trayectoria" />
+              <div className="hidden md:block w-px h-8 bg-white/10" />
+              <StatItem prefix="+" end={500} label="Vehículos vendidos" />
+              <div className="hidden md:block w-px h-8 bg-white/10" />
+              <StatItem end={100} suffix="%" label="Trámites en regla" />
+            </div>
+          </div>
+        </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-7 left-1/2 -translate-x-1/2 animate-bounce opacity-30">
+          <ChevronDown className="w-6 h-6 text-[#DDB43C]" />
+        </div>
+      </section>
+    </>
+  )
+}
+
+function StatItem({ prefix, end, suffix, label }: { prefix?: string; end: number; suffix?: string; label: string }) {
+  return (
+    <div className="text-center">
+      <p className="text-2xl md:text-3xl font-bold text-[#DDB43C]">
+        <AnimatedCounter end={end} prefix={prefix} suffix={suffix} />
+      </p>
+      <p className="text-xs text-white/40 mt-1 tracking-wider uppercase">{label}</p>
+    </div>
   )
 }
 

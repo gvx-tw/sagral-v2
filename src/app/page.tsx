@@ -7,6 +7,7 @@ import { ContactSection } from '@/components/ui/landing/contact-section'
 import { Footer } from '@/components/ui/landing/footer'
 import { WhatsAppFAB } from '@/components/ui/landing/whatsapp-fab'
 import { AnalyticsTracker } from '@/components/ui/landing/analytics-tracker'
+import { ScrollToTop } from '@/components/ui/scroll-to-top'
 import type { LandingData } from '@/types/landing'
 
 async function getLandingData(): Promise<LandingData> {
@@ -36,6 +37,7 @@ export default async function HomePage() {
       <Footer config={config} />
       <WhatsAppFAB whatsapp={config.whatsapp} />
       <AnalyticsTracker />
+      <ScrollToTop />
     </>
   )
 }

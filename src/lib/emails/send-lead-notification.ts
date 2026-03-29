@@ -1,9 +1,15 @@
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 import { render } from "@react-email/components";
 import LeadOwnerEmail from "@/emails/lead-owner";
 import LeadConfirmationEmail from "@/emails/lead-confirmation";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_APP_PASSWORD,
+  },
+});
 
 export interface LeadNotificationData {
   // Datos del lead
@@ -30,41 +36,39 @@ export interface LeadNotificationData {
 export async function sendLeadNotification(
   data: LeadNotificationData
 ): Promise<void> {
-  const fromEmail = process.env.RESEND_FROM_EMAIL ?? "onboarding@resend.dev";
+  const fromEmail = process.env.GMAIL_USER ?? "";
   const vehicleTitle = `${data.vehicleBrand} ${data.vehicleModel} ${data.vehicleYear}`;
   const adminUrl = data.siteUrl;
 
   // ── 1. Email al dueño ────────────────────────────────
-try {
-  const ownerHtml = await render(
-    LeadOwnerEmail({
-      leadName: data.leadName,
-      leadPhone: data.leadPhone,
-      leadEmail: data.leadEmail,
-      leadMessage: data.leadMessage,
-      vehicleBrand: data.vehicleBrand,
-      vehicleModel: data.vehicleModel,
-      vehicleYear: data.vehicleYear,
-      vehiclePrice: data.vehiclePrice,
-      vehicleCoverUrl: data.vehicleCoverUrl,
-      vehicleSlug: data.vehicleSlug,
-      adminUrl,
-      whatsappPhone: data.businessPhone,
-    })
-  );
+  try {
+    const ownerHtml = await render(
+      LeadOwnerEmail({
+        leadName: data.leadName,
+        leadPhone: data.leadPhone,
+        leadEmail: data.leadEmail,
+        leadMessage: data.leadMessage,
+        vehicleBrand: data.vehicleBrand,
+        vehicleModel: data.vehicleModel,
+        vehicleYear: data.vehicleYear,
+        vehiclePrice: data.vehiclePrice,
+        vehicleCoverUrl: data.vehicleCoverUrl,
+        vehicleSlug: data.vehicleSlug,
+        adminUrl,
+        whatsappPhone: data.businessPhone,
+      })
+    );
 
- 
-  const result = await resend.emails.send({
-    from: `${data.businessName} <${fromEmail}>`,
-    to: data.ownerEmail,
-    subject: `Nueva consulta — ${vehicleTitle}`,
-    html: ownerHtml,
-  });
+    await transporter.sendMail({
+      from: `${data.businessName} <${fromEmail}>`,
+      to: data.ownerEmail,
+      subject: `Nueva consulta — ${vehicleTitle}`,
+      html: ownerHtml,
+    });
+  } catch (err) {
+    console.error("[sendLeadNotification] Error enviando email al dueño:", err);
+  }
 
-
-} catch (err) {
-  console.error("[sendLeadNotification] Error enviando email al dueño:", err);
-}
   // ── 2. Email al interesado (solo si dio email) ───────
   if (data.leadEmail) {
     try {
@@ -84,7 +88,7 @@ try {
         })
       );
 
-      await resend.emails.send({
+      await transporter.sendMail({
         from: `${data.businessName} <${fromEmail}>`,
         to: data.leadEmail,
         subject: `Recibimos tu consulta — ${vehicleTitle}`,

@@ -75,7 +75,7 @@ export function VehicleSpecs({ vehicle }: VehicleSpecsProps) {
 
         <p className="text-muted-foreground text-lg">{vehicle.year}</p>
 
-        <p className="text-4xl font-extrabold text-primary">{formattedPrice}</p>
+        <p className="text-4xl font-extrabold text-[#111111]">{formattedPrice}</p>
       </div>
 
       <Separator />

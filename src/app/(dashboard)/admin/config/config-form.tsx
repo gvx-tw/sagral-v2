@@ -34,7 +34,7 @@ export function ConfigForm({ config }: { config: Record<string, string> }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form key={JSON.stringify(config)} onSubmit={handleSubmit} className="space-y-5">
       <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 space-y-5">
         <h2 className="text-sm font-medium text-zinc-300 uppercase tracking-wider">
           Contacto y ubicación

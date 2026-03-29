@@ -32,7 +32,7 @@ export function VehicleCard({ vehicle }: Props) {
   return (
     <Link
       href={`/catalogo/${vehicle.id}`}
-      className="group block bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow"
+      className="group block bg-white/90 backdrop-blur-sm rounded-xl border border-gray-200/80 overflow-hidden hover:shadow-xl hover:shadow-[#DDB43C]/15 hover:border-[#DDB43C]/40 transition-all duration-300 hover:-translate-y-1"
     >
       {/* Imagen */}
       <div className="relative aspect-4/3 overflow-hidden bg-gray-100">
@@ -54,9 +54,20 @@ export function VehicleCard({ vehicle }: Props) {
         )}
 
         {/* Badge condición */}
-        <span className="absolute top-2 left-2 text-xs font-medium px-2 py-1 rounded-full bg-white/90 text-gray-700">
-          {vehicle.condition === 'nuevo' ? 'Nuevo' : 'Usado'}
-        </span>
+        {vehicle.condition === 'nuevo' ? (
+          <span className="absolute top-2 left-2">
+            <span className="relative inline-flex">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#DDB43C] opacity-30" />
+              <span className="relative text-xs font-semibold px-2 py-1 rounded-full bg-[#DDB43C] text-black">
+                Nuevo
+              </span>
+            </span>
+          </span>
+        ) : (
+          <span className="absolute top-2 left-2 text-xs font-semibold px-2 py-1 rounded-full bg-slate-200 text-slate-600">
+            Usado
+          </span>
+        )}
       </div>
 
       {/* Info */}
@@ -67,7 +78,7 @@ export function VehicleCard({ vehicle }: Props) {
         <p className="text-sm text-gray-500 mt-1">
           {vehicle.year} · {vehicle.transmission === 'manual' ? 'Manual' : 'Automático'} · {vehicle.fuelType}
         </p>
-        <p className="mt-3 font-bold text-blue-600 text-xl">
+        <p className="mt-3 font-bold text-[#DDB43C] text-xl">
           {formattedPrice}
         </p>
       </div>

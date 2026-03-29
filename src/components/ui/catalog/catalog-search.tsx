@@ -54,7 +54,7 @@ export function CatalogSearch() {
         value={value}
         onChange={handleChange}
         placeholder="Buscar por marca, modelo o descripción..."
-        className="w-full rounded-xl border border-gray-300 bg-white text-gray-900 px-4 py-3 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full rounded-xl border border-gray-300 bg-white text-gray-900 px-4 py-3 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-[#DDB43C]"
       />
       <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
         🔍

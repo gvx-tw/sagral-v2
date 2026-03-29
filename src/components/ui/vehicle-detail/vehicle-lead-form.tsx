@@ -167,7 +167,7 @@ export function VehicleLeadForm({ vehicleId, vehicleName }: VehicleLeadFormProps
 
         <Button
           type="submit"
-          className="w-full"
+          className="w-full bg-[#DDB43C] hover:bg-[#B8941F] text-black border-transparent"
           disabled={state === 'loading'}
         >
           {state === 'loading' ? (

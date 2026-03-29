@@ -37,8 +37,8 @@ export function AdminHeader({ user }: Props) {
                         render={
                             <Button variant="ghost" className="h-8 w-8 rounded-full p-0">
                                 <Avatar className="h-8 w-8">
-                                    <AvatarFallback className="bg-zinc-700 text-zinc-200 text-xs">
-                                        {initials}
+                                    <AvatarFallback className="bg-black border border-[#DDB43C] text-[#DDB43C] text-xs font-bold">
+                                        SA
                                     </AvatarFallback>
                                 </Avatar>
                             </Button>

@@ -53,7 +53,7 @@ export function RelatedVehicles({ vehicles }: RelatedVehiclesProps) {
                 <p className="font-semibold text-sm">
                   {v.brand} {v.model} {v.year}
                 </p>
-                <p className="text-primary font-bold mt-1">{formattedPrice}</p>
+                <p className="text-[#111111] font-bold mt-1">{formattedPrice}</p>
                 <p className="text-xs text-muted-foreground mt-0.5">
                   {v.condition === 'nuevo' ? 'Nuevo' : 'Usado'}
                   {v.km != null && ` · ${v.km.toLocaleString('es-AR')} km`}
